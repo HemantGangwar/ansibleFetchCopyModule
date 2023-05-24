@@ -1,0 +1,14 @@
+---
+- name: Testing playbook via SSM
+  hosts: all
+  become: true
+  tasks:
+  - name: Creating a user
+    user: 
+      name: mobijump
+      state: present
+  - shell: ip -4 a | grep -i eth0 | grep inet | awk '{print $2}' | cut -d'/' -f1
+    register: ip_register
+  - name: Debug a message
+    debug:
+      msg: "Your private IP is: {{ ip_register.stdout }}"
